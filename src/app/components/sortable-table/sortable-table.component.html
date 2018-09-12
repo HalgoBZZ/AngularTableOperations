@@ -1,0 +1,84 @@
+<div style="margin-left:10%;margin-top:2%;">
+  <div class="form-group">
+  <div class="col-md-6" >
+    <input type="text" [(ngModel)]="searchText" 
+           class="form-control" placeholder="Search By Category" />
+  </div>
+</div>
+<div class="col-xs-12" style="width:100%">
+  <table class="table table-responsive table-hover">
+    <thead>
+    <tr>
+      <th id="th1" style="width:25%;" class="pointer" (click)="sort('CategoryID')" >
+          <span class="ui-column-resizer" (mousedown) = "onMouseDown($event)">
+              <i style="position:absolute;" class="fa fa-angle-double-left"></i>
+          </span>
+        Category ID
+        <i class="fa" [ngClass]="{'fa-sort': column != 'CategoryID', 
+                        'fa-sort-asc': (column == 'CategoryID' && !isDesc), 
+                        'fa-sort-desc': (column == 'CategoryID' && isDesc) }"
+        aria-hidden="true"> </i>
+        
+      </th>
+      <th id="th2" style="width:25%;" class="pointer" (click)="sort('CategoryName')">
+          <span class="ui-column-resizer-left">
+              <i style="position:absolute; " class="fa fa-angle-double-right"></i>
+          </span>
+          <span class="ui-column-resizer" (mousedown) = "onMouseDown($event)">
+              <i style="position:absolute;" class="fa fa-angle-double-left"></i>
+          </span>
+        Category
+        <i class="fa" [ngClass]="{'fa-sort': column != 'CategoryID', 
+                        'fa-sort-asc': (column == 'CategoryID' && !isDesc), 
+                        'fa-sort-desc': (column == 'CategoryID' && isDesc) }"
+        aria-hidden="true"> </i>
+      </th>
+      <th id="th3" style="width:25%;" class="pointer" (click)="sort('Description')" >
+          <span class="ui-column-resizer-left">
+              <i style="position:absolute;" class="fa fa-angle-double-right"></i>
+          </span>
+          <span class="ui-column-resizer" (mousedown) = "onMouseDown($event)">
+              <i style="position:absolute;" class="fa fa-angle-double-left"></i>
+          </span>
+          Description
+          <i class="fa" [ngClass]="{'fa-sort': column != 'CategoryID', 
+                        'fa-sort-asc': (column == 'CategoryID' && !isDesc), 
+                        'fa-sort-desc': (column == 'CategoryID' && isDesc) }"
+        aria-hidden="true"> </i>
+      </th>
+      <th>
+          <span class="ui-column-resizer-left">
+              <i style="position:absolute;" class="fa fa-angle-double-right"></i>
+          </span>
+        <input type="checkbox" id="chAll" [checked]="isAllChecked()" (change)="checkAll($event)">
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of records | category: searchText| orderBy: {property: column, direction: direction} ; let i = index">
+      <td [style.width.px]="width1">{{item.CategoryID}}</td>
+      <td [style.width.px]="width2">{{item.CategoryName}}</td>
+      <td [style.width.px]="width3">{{item.Description}}</td>
+      <td><input type="checkbox" [id]="'ch'+i" [(ngModel)]="item.selected"></td>
+    </tr>
+    </tbody>   
+  </table>
+
+  <div style="margin-bottom:10px;">
+    <div style="display:inline; margin-right:10px;">
+      Show: <input type="number" [max]="nbRows" min="1" [(ngModel)]="linePerPage" [value]="linePerPage" (change)="renitTable()">
+      </div>
+      <div style="display: inline;">
+        <button class="btn btn-info" (click)="goPreviousPage()">Previous</button>
+        <button *ngIf="current==nbPages" class="btn" (click)="goSpecificPage(1)">1</button>
+        <button *ngIf="current==nbPages" class="btn" (click)="goSpecificPage(2)">2</button>
+        <button *ngIf="current<nbPages" class="btn" (click)="goSpecificPage(current)">{{current}}</button>
+        <button *ngIf="nbPages>1 && current<nbPages-1" class="btn" (click)="goSpecificPage(current+1)">{{current+1}}</button>
+        <button *ngIf="nbPages>4" type="button" class="btn" disabled>...</button>
+        <button *ngIf="nbPages>2 && current+1<nbPages-1"class="btn" (click)="goSpecificPage(nbPages-1)">{{nbPages-1}}</button>
+        <button  class="btn" (click)="goSpecificPage(nbPages)">{{nbPages}}</button>
+        <button class="btn btn-info" (click)="goNextPage()">Next</button>
+      </div>
+  </div>
+</div>
+</div>
